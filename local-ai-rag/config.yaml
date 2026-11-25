@@ -1,0 +1,17 @@
+model: dmr:huggingface.co/bartowski/qwen2.5-coder-7b-instruct-gguf:Q4_K_M
+rag_embedding_model: dmr:docker.io/ai/nomic-embed-text-v1.5:latest
+repl_prelude: "default:personal"
+save_session: true
+compress_threshold: 3000
+clients:
+  - type: openai-compatible
+    name: dmr
+    api_base: http://localhost:12434/engines/v1
+    api_key: not-needed
+    models:
+      - name: huggingface.co/bartowski/qwen2.5-coder-7b-instruct-gguf:Q4_K_M
+        max_input_tokens: 4096
+      - name: docker.io/ai/nomic-embed-text-v1.5:latest
+        type: embedding
+        default_chunk_size: 1000
+        max_batch_size: 50
