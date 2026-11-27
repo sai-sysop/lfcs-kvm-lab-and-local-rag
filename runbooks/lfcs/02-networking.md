@@ -10,3 +10,11 @@ Scope: ip/nmcli/netplan, DNS, chrony/NTP, OpenSSH, firewalls (nftables/ufw/firew
 - `curl` essentials: `-s` (silent), `-i` (headers+body), `-I` (headers only), `-v` (verbose), `-c`/`-b` (save/send cookies), `-H` (custom header).
 - Reference: `man 8 nginx`, `man 1 curl`, `man 8 setsebool`.
 
+
+## Linux Sockets (`ss`) & `curl` Diagnostics
+- Socket = `Protocol + IP:Port` endpoint managed by the kernel (`ss` replaces legacy `netstat`).
+- Core audit command: `sudo ss -tulpn` (`-t` TCP, `-u` UDP, `-l` listening, `-p` process/PID, `-n` numeric) or filtered `sudo ss -tlnp 'sport = :8099'`.
+- Bind scope: `127.0.0.1:<port>` is loopback-only; `0.0.0.0:<port>` / `[::]:<port>` listens on all interfaces.
+- `curl` checks: `-I` (headers only), `-i` (headers + body), `-v` (full TCP/HTTP trace), `-L` (follow 301/302 redirects), `-s -o /dev/null -w "%{http_code}\n"` (status code only).
+- Failure distinction: `Connection refused` = no listening socket on that port; `HTTP 404` = socket reachable, resource path missing.
+- Reference: `man 8 ss`, `man 1 curl`.
