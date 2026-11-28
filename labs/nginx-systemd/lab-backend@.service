@@ -1,0 +1,13 @@
+[Unit]
+Description=LFCS Lab Backend %i (Port 900%i)
+After=network.target
+
+[Service]
+User=sai
+WorkingDirectory=/home/sai/lfcs/nginx/backend%i
+ExecStart=/usr/bin/python3 -m http.server 900%i --bind 127.0.0.1
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=multi-user.target

@@ -18,3 +18,11 @@ Scope: ip/nmcli/netplan, DNS, chrony/NTP, OpenSSH, firewalls (nftables/ufw/firew
 - `curl` checks: `-I` (headers only), `-i` (headers + body), `-v` (full TCP/HTTP trace), `-L` (follow 301/302 redirects), `-s -o /dev/null -w "%{http_code}\n"` (status code only).
 - Failure distinction: `Connection refused` = no listening socket on that port; `HTTP 404` = socket reachable, resource path missing.
 - Reference: `man 8 ss`, `man 1 curl`.
+
+## Nginx Weighted Upstreams, Backup & Path Routing
+- Weighted split: `weight=3` + `weight=1` routes 75% / 25% (default `weight=1`).
+- Passive health window: `max_fails=2 fail_timeout=10s` quarantines a failed peer for 10s after 2 failures.
+- Standby fallback: `server 127.0.0.1:9003 backup;` receives traffic only when all primary peers are down.
+- `proxy_pass` trailing slash: `location /app1/` + `proxy_pass http://127.0.0.1:9001/;` strips `/app1/` before forwarding.
+- Proxy identity headers: `Host $host` preserves client domain; `X-Real-IP $remote_addr` preserves true client IP.
+- `ss` port-range filter: `sudo ss -tlpn 'sport ge :9001 and sport le :9003'`.
